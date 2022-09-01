@@ -20,6 +20,15 @@ class LineBotController < ApplicationController
       # LINE からテキストが送信された場合
       if (event.type === Line::Bot::Event::MessageType::Text)
         # LINE からテキストが送信されたときの処理を記述する
+        message = event["message"]["text"]
+
+        Task.create(content: message)
+
+        reply_message = {
+          type: "text",
+          text: "タスク: 「#{message}」 を登録しました！"
+        }
+        client.reply_message(event["replyToken"], reply_message)
       end
     end
 
